@@ -74,7 +74,7 @@ For a beam with:
 The application will calculate deflection and rotation at your specified point X.
 
 ## License
-[Add your license information here]
+This project is licensed under the [MIT License](LICENSE).
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
