@@ -10,6 +10,7 @@ Original file is located at
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
+import streamlit as sl
 
 # MODULE 1: User Inputs
 # Loads in pounds
