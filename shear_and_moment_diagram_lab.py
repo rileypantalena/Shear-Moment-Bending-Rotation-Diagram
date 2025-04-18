@@ -60,25 +60,28 @@ if st.button("Run Analysis"):
 
 
 # Bending Moment Diagram
-    plt.subplot(2, 1, 1)
+    plt.figure()
     plt.plot(x, M, linewidth=1, color='yellowgreen')
     plt.fill_between(x, M, color='yellowgreen', alpha=0.2)
     plt.grid(True)
     plt.title("Bending Moment Diagram")
     plt.xlabel("Distance from Left Support [in]")
     plt.ylabel("Bending Moment [lb-in]")
-    plt.show()
+    st.pyplot(plt)  # Display in Streamlit
     
+    # Clear plot before next one
+    plt.clf()
     
     # Shear Force Diagram
-    plt.subplot(2, 1, 1)
+    plt.figure()
     plt.plot(x, V, linewidth=1, color='royalblue')
     plt.fill_between(x, V, color='royalblue', alpha=0.2)
     plt.grid(True)
     plt.title("Shear Force Diagram")
     plt.xlabel("Distance from Left Support [in]")
     plt.ylabel("Shear Force [lb-in]")
-    plt.show()
+    st.pyplot(plt)  # Display in Streamlit
+
 
 # MODULE 3: Deflection and Rotation Using Virtual Work
 
