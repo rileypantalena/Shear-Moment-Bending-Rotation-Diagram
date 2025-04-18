@@ -34,87 +34,87 @@ I = st.number_input("Enter moment of inertia I (in^4):", value=100.0)
 if st.button("Run Analysis"):
 
 # Reaction Forces Calculation
-Rb = (P1 * a + P2 * b + P3 * c) / L
-Ra = (P1 + P2 + P3) - Rb
+    Rb = (P1 * a + P2 * b + P3 * c) / L
+    Ra = (P1 + P2 + P3) - Rb
 
 # MODULE 2: Shear and Moment Diagrams
 
-dx = L / 10000.0
-x = np.arange(0, L + dx, dx)    #   np.arrange (start, stop, step) - creates 1D array with evenly spaced values
-M = np.zeros_like(x)            #   prepare array to store bending moment
-V = np.zeros_like(x)            #   prepare array to store shear force
+    dx = L / 10000.0
+    x = np.arange(0, L + dx, dx)    #   np.arrange (start, stop, step) - creates 1D array with evenly spaced values
+    M = np.zeros_like(x)            #   prepare array to store bending moment
+    V = np.zeros_like(x)            #   prepare array to store shear force
 
-for i, xi in enumerate(x):
-    if xi <= a:
-        M[i] = Ra * xi
-        V[i] = Ra
-    elif xi <= b:
-        M[i] = Ra * xi - P1 * (xi - a)
-        V[i] = Ra - P1
-    elif xi <= c:
-        M[i] = Ra * xi - P1 * (xi - a) - P2 * (xi - b)
-        V[i] = Ra - P1 - P2
-    else:
-        M[i] = Ra * xi - P1 * (xi - a) - P2 * (xi - b) - P3 * (xi - c)
-        V[i] = Ra - P1 - P2 - P3
+    for i, xi in enumerate(x):
+        if xi <= a:
+            M[i] = Ra * xi
+            V[i] = Ra
+        elif xi <= b:
+            M[i] = Ra * xi - P1 * (xi - a)
+            V[i] = Ra - P1
+        elif xi <= c:
+            M[i] = Ra * xi - P1 * (xi - a) - P2 * (xi - b)
+            V[i] = Ra - P1 - P2
+        else:
+            M[i] = Ra * xi - P1 * (xi - a) - P2 * (xi - b) - P3 * (xi - c)
+            V[i] = Ra - P1 - P2 - P3
 
 
 # Bending Moment Diagram
-plt.subplot(2, 1, 1)
-plt.plot(x, M, linewidth=1, color='yellowgreen')
-plt.fill_between(x, M, color='yellowgreen', alpha=0.2)
-plt.grid(True)
-plt.title("Bending Moment Diagram")
-plt.xlabel("Distance from Left Support [in]")
-plt.ylabel("Bending Moment [lb-in]")
-plt.show()
-
-
-# Shear Force Diagram
-plt.subplot(2, 1, 1)
-plt.plot(x, V, linewidth=1, color='royalblue')
-plt.fill_between(x, V, color='royalblue', alpha=0.2)
-plt.grid(True)
-plt.title("Shear Force Diagram")
-plt.xlabel("Distance from Left Support [in]")
-plt.ylabel("Shear Force [lb-in]")
-plt.show()
+    plt.subplot(2, 1, 1)
+    plt.plot(x, M, linewidth=1, color='yellowgreen')
+    plt.fill_between(x, M, color='yellowgreen', alpha=0.2)
+    plt.grid(True)
+    plt.title("Bending Moment Diagram")
+    plt.xlabel("Distance from Left Support [in]")
+    plt.ylabel("Bending Moment [lb-in]")
+    plt.show()
+    
+    
+    # Shear Force Diagram
+    plt.subplot(2, 1, 1)
+    plt.plot(x, V, linewidth=1, color='royalblue')
+    plt.fill_between(x, V, color='royalblue', alpha=0.2)
+    plt.grid(True)
+    plt.title("Shear Force Diagram")
+    plt.xlabel("Distance from Left Support [in]")
+    plt.ylabel("Shear Force [lb-in]")
+    plt.show()
 
 # MODULE 3: Deflection and Rotation Using Virtual Work
 
 # Compute the virtual moment diagram m_t and its derivative
-m_t = np.zeros_like(x)
-m_t_d= np.zeros_like(x)
-for i, xi in enumerate(x):
-    if xi <= X:
-        m_t[i] = xi * (L - X) / L
-        m_t_d[i] = (L - X) / L  # derivative when xi <= X
-    else:
-        m_t[i] = X * (L - xi) / L
-        m_t_d[i] = -X / L       # derivative when xi > X
-
-# Use the virtual work theorem to compute deflection and rotation at X
-delta = np.trapezoid(M * m_t, x) / (E * I)            # x = np.arange(0, L + dx, dx) knows to take range 0 to L
-theta = np.trapezoid(M * m_t_d, x) / (E * I)
-
-# Display Results
-
-
-# Try another integrating method and compare
-from scipy.integrate import simpson
-
-delta1 = simpson(M * m_t, x=x) / (E * I)
-theta1 = simpson(M * m_t_d, x=x) / (E * I)
-
-# Display Results
-
-
-st.subheader("--- Results at x = {:.2f} in ---".format(X))
-
-st.subheader("--- Deflection Using Trapezoid Method ---".format(X))
-st.write("**Deflection, Δ = {:.6e} in**".format(delta))
-st.write("**Rotation, θ  = {:.6e} rad**".format(theta))
-
-st.subheader("--- Deflection Using Integration Method ---".format(X))
-st.write("**Deflection, Δ = {:.6e} in**".format(delta1))
-st.write("**Rotation, θ  = {:.6e} rad**".format(theta1))
+    m_t = np.zeros_like(x)
+    m_t_d= np.zeros_like(x)
+    for i, xi in enumerate(x):
+        if xi <= X:
+            m_t[i] = xi * (L - X) / L
+            m_t_d[i] = (L - X) / L  # derivative when xi <= X
+        else:
+            m_t[i] = X * (L - xi) / L
+            m_t_d[i] = -X / L       # derivative when xi > X
+    
+    # Use the virtual work theorem to compute deflection and rotation at X
+    delta = np.trapezoid(M * m_t, x) / (E * I)            # x = np.arange(0, L + dx, dx) knows to take range 0 to L
+    theta = np.trapezoid(M * m_t_d, x) / (E * I)
+    
+    # Display Results
+    
+    
+    # Try another integrating method and compare
+    from scipy.integrate import simpson
+    
+    delta1 = simpson(M * m_t, x=x) / (E * I)
+    theta1 = simpson(M * m_t_d, x=x) / (E * I)
+    
+    # Display Results
+    
+    
+    st.subheader("--- Results at x = {:.2f} in ---".format(X))
+    
+    st.subheader("--- Deflection Using Trapezoid Method ---".format(X))
+    st.write("**Deflection, Δ = {:.6e} in**".format(delta))
+    st.write("**Rotation, θ  = {:.6e} rad**".format(theta))
+    
+    st.subheader("--- Deflection Using Integration Method ---".format(X))
+    st.write("**Deflection, Δ = {:.6e} in**".format(delta1))
+    st.write("**Rotation, θ  = {:.6e} rad**".format(theta1))
