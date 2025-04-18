@@ -10,35 +10,32 @@ Original file is located at
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-import streamlit as sl
+import streamlit as st
+st.title("Beam Analysis: Shear, Moment, Deflection & Rotation")
 
-# MODULE 1: User Inputs
-# Loads in pounds
-P1 = float(input("Enter load P1 (lb): "))
-P2 = float(input("Enter load P2 (lb): "))
-P3 = float(input("Enter load P3 (lb): "))
+# User Inputs
+st.header("User Inputs")
 
-# Distances (in inches)
-a = float(input("Enter distance a (in) for load P1: "))
-b = float(input("Enter distance b (in) for load P2: "))
-c = float(input("Enter distance c (in) for load P3: "))
+P1 = st.number_input("Enter load P1 (lb):", value=100.0)
+P2 = st.number_input("Enter load P2 (lb):", value=150.0)
+P3 = st.number_input("Enter load P3 (lb):", value=200.0)
 
-# Beam span in inches
-L = float(input("Enter span L (in): "))
+a = st.number_input("Enter distance a (in) for load P1:", value=10.0)
+b = st.number_input("Enter distance b (in) for load P2:", value=20.0)
+c = st.number_input("Enter distance c (in) for load P3:", value=30.0)
 
-# Point along the beam at which deflection and rotation are calculated (in inches)
-X = float(input("Enter point X (in) where deflection and rotation are to be calculated: "))
+L = st.number_input("Enter span L (in):", value=40.0)
 
-# Material properties
-E = float(input("Enter modulus of elasticity E (psi): "))
-I = float(input("Enter moment of inertia I (in^4): "))
+X = st.number_input("Enter point X (in) where deflection and rotation are to be calculated:", value=25.0)
+
+E = st.number_input("Enter modulus of elasticity E (psi):", value=29000000.0)
+I = st.number_input("Enter moment of inertia I (in^4):", value=100.0)
+
+if st.button("Run Analysis"):
 
 # Reaction Forces Calculation
 Rb = (P1 * a + P2 * b + P3 * c) / L
 Ra = (P1 + P2 + P3) - Rb
-
-print("reaction at support a =", Ra)
-print("reaction at support b =", Rb)
 
 # MODULE 2: Shear and Moment Diagrams
 
@@ -102,18 +99,22 @@ theta = np.trapezoid(M * m_t_d, x) / (E * I)
 
 # Display Results
 
-print("\n--- Results at x = {:.2f} in ---".format(X))
-print("Trapezoid Result: Deflection, Δ = {:.6e} in".format(delta))
-print("Trapezoid Result: Rotation, θ = {:.6e} in".format(theta))
 
 # Try another integrating method and compare
 from scipy.integrate import simpson
 
-delta = simpson(M * m_t, x=x) / (E * I)
-theta = simpson(M * m_t_d, x=x) / (E * I)
+delta1 = simpson(M * m_t, x=x) / (E * I)
+theta1 = simpson(M * m_t_d, x=x) / (E * I)
 
 # Display Results
 
-print("\n--- Results at x = {:.2f} in ---".format(X))
-print("Integration Result: Deflection, Δ = {:.6e} in".format(delta))
-print("Integration Result: Rotation, θ = {:.6e} in".format(theta))
+
+st.subheader("--- Results at x = {:.2f} in ---".format(X))
+
+st.subheader("--- Deflection Using Trapezoid Method ---".format(X))
+st.write("**Deflection, Δ = {:.6e} in**".format(delta))
+st.write("**Rotation, θ  = {:.6e} rad**".format(theta))
+
+st.subheader("--- Deflection Using Integration Method ---".format(X))
+st.write("**Deflection, Δ = {:.6e} in**".format(delta1))
+st.write("**Rotation, θ  = {:.6e} rad**".format(theta1))
