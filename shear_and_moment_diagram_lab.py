@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import streamlit as st
 st.title("Beam Analysis: Shear, Moment, Deflection & Rotation")
 
+st.image("beam-diagram.png", use_column_width=True)
 # User Inputs
 st.header("User Inputs")
 
